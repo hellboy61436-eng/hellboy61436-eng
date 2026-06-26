@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Terminal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#000;
+    overflow:hidden;
+    font-family:'Share Tech Mono', monospace;
+}
+
+canvas{
+    position:fixed;
+    inset:0;
+    z-index:0;
+}
+
+.scanlines{
+    position:fixed;
+    inset:0;
+    background:repeating-linear-gradient(
+        transparent 0px,
+        rgba(255,255,255,.03) 2px,
+        transparent 4px
+    );
+    pointer-events:none;
+    z-index:2;
+}
+
+.container{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    z-index:3;
+}
+
+.flag{
+    width:80px;
+    margin-bottom:15px;
+    filter:drop-shadow(0 0 12px #fff);
+}
+
+.jai{
+    font-size:40px;
+    font-weight:bold;
+    letter-spacing:8px;
+    margin-bottom:30px;
+}
+
+.orange{color:#FF9933;}
+.white{color:#fff;}
+.green{color:#138808;}
+
+.title{
+    font-size:70px;
+    color:#00ff66;
+    text-transform:uppercase;
+    text-shadow:
+        0 0 5px #00ff66,
+        0 0 15px #00ff66,
+        0 0 35px #00ff66,
+        0 0 60px #00ff66;
+    animation:glitch 2s infinite;
+}
+
+.subtitle{
+    margin-top:25px;
+    font-size:26px;
+    color:#00ff99;
+}
+
+.terminal{
+    margin-top:40px;
+    display:inline-block;
+    text-align:left;
+    color:#00ff66;
+    font-size:20px;
+    border:1px solid #00ff66;
+    padding:15px 20px;
+    box-shadow:0 0 20px rgba(0,255,0,.4);
+}
+
+.cursor{
+    animation:blink .8s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+@keyframes glitch{
+    0%,100%{transform:translate(0);}
+    20%{transform:translate(-2px,2px);}
+    40%{transform:translate(2px,-2px);}
+    60%{transform:translate(-1px,1px);}
+    80%{transform:translate(1px,-1px);}
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+<div class="scanlines"></div>
+
+<div class="container">
+
+<img src="indianflag.png" class="flag" alt="Indian Flag">
+
+<div class="jai">
+<span class="orange">JAI</span>
+<span class="white"> </span>
+<span class="green">HIND</span>
+</div>
+
+<div class="title">
+Hacked By<br>
+Shashh.Haxx
+</div>
+
+<div class="subtitle">
+&gt; SYSTEM OVERRIDDEN<span class="cursor">_</span>
+</div>
+
+<div class="terminal">
+root@terminal:~$ echo "YOU ARE HACKED BABY"<span class="cursor">_</span>
+</div>
+
+<script>
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+}
+resize();
+window.onresize=resize;
+
+const letters="01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@";
+const size=16;
+const cols=Math.floor(canvas.width/size);
+const drops=new Array(cols).fill(1);
+
+function draw(){
+    ctx.fillStyle="rgba(0,0,0,0.08)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="#00ff66";
+    ctx.font=size+"px monospace";
+
+    for(let i=0;i<drops.length;i++){
+        const text=letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text,i*size,drops[i]*size);
+
+        if(drops[i]*size>canvas.height && Math.random()>0.98){
+            drops[i]=0;
+        }
+        drops[i]++;
+    }
+}
+
+setInterval(draw,35);
+</script>
+
+</body>
+</html>
